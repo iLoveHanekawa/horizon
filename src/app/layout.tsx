@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <Script src="https://kit.fontawesome.com/2e5130a48b.js" crossOrigin="anonymous"></Script>
+      <body className={inter.className}>
+        <nav className="bg-black px-6 py-5 fixed w-full top-0 left-0 flex gap-4 text-gray-400 text-sm font-medium tracking-wide border-b-xs border-gray-900">
+          <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Home</Link>
+          <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Projects</Link>
+        </nav>
+        {children}
+      </body>
     </html>
   );
 }
