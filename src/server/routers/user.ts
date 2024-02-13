@@ -11,7 +11,7 @@ export const userRouter = router({
             const { input } = req;
             const firstname = input.firstname;
             const lastname = input.lastname;
-            const user = prisma.user.create({
+            const user = await prisma.user.create({
                 data: {
                     firstname,
                     lastname
@@ -22,7 +22,6 @@ export const userRouter = router({
             console.log(error);
             return null;
         }
-        
     }),
     show: procedure.query(async () => {
         try {
@@ -32,5 +31,25 @@ export const userRouter = router({
             console.log(error);
             return null;      
         }
+    }),
+    update: procedure.input(z.object({
+        firstname: z.string(),
+        lastname: z.string(),
+        description: z.array(z.string())
+    })).mutation(async (req) => {
+        const { input } = req;
+        const { firstname, lastname, description } = input;
+        // retieve from session storage.
+        const id = '';
+        await prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                firstname,
+                lastname,
+                description
+            }
+        })
     })
 });
