@@ -14,7 +14,7 @@ model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   firstname String
   lastname String
-  description String[]
+  password String
 }
 
 enum Brand {
@@ -34,4 +34,9 @@ model TopNavigation {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   link String
   text String
+}
+
+model Introduction {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  description String[]
 }

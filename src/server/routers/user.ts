@@ -1,3 +1,4 @@
+import 'server-only'
 import { z } from 'zod'
 import { router, procedure } from '../trpc'
 import prisma from '@/db'
@@ -8,16 +9,16 @@ export const userRouter = router({
         lastname: z.string()
     })).mutation(async (req) => {
         try {
-            const { input } = req;
-            const firstname = input.firstname;
-            const lastname = input.lastname;
-            const user = await prisma.user.create({
-                data: {
-                    firstname,
-                    lastname
-                }
-            });
-            return user;
+            // const { input } = req;
+            // const firstname = input.firstname;
+            // const lastname = input.lastname;
+            // const user = await prisma.user.create({
+            //     data: {
+            //         firstname,
+            //         lastname
+            //     }
+            // });
+            // return user;
         } catch (error) {
             console.log(error);
             return null;
@@ -41,15 +42,15 @@ export const userRouter = router({
         const { firstname, lastname, description } = input;
         // retieve from session storage.
         const id = '';
-        await prisma.user.update({
-            where: {
-                id
-            },
-            data: {
-                firstname,
-                lastname,
-                description
-            }
-        })
+        // await prisma.user.update({
+        //     where: {
+        //         id
+        //     },
+        //     data: {
+        //         firstname,
+        //         lastname,
+        //         description
+        //     }
+        // })
     })
 });
