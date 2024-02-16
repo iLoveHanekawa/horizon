@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE } from "./constants"
 import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { JWT_SECRET } from "./constants"
+import prisma from '@/db';
 import { NextRequest, NextResponse } from "next/server";
 
 export type HorizonPayload = {

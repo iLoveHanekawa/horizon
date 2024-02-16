@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache';
-import { genSalt, hash } from 'bcrypt';
+import { genSalt, hash, compare } from 'bcrypt';
 import prisma from './db';
 import { encrypt } from './auth/utils';
 import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE, SALT_ROUNDS } from './auth/constants';
@@ -83,20 +83,29 @@ export async function login(prevState: any, formData: FormData): Promise<{ messa
             email: formData.get('email'),
             password: formData.get('password')
         });
-        const salt = await genSalt(SALT_ROUNDS);
-        const hashedPass = await hash(data.password, salt);
         const admin = await prisma?.user.findFirst({
             where: {
                 email: data.email
             }
         });
-        if(admin?.password === hashedPass) {
+        if(!admin) {
+            return {
+                message: 'User not found! Please register.'
+            }
+        }
+        const isPassMatched = await compare(data.password, admin?.password);
+        if(isPassMatched) {
             const signedJWT = await encrypt({ userId: admin.id });
             const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
             cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
+            return {
+                message: "Logged the user in successfully."
+            }
         }
-        return {
-            message: "Logged the user in successfully."
+        else {
+            return {
+                message: "Incorrect password or username!"
+            }
         }
     } catch (error) {
         console.log(error);

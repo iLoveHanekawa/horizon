@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 
 export default function Page() {
     const { pending } = useFormStatus();
-    const [state, dispatch] = useFormState(register, { message: '' });
+    const [state, dispatch] = useFormState(register, { message: 'waiting' });
     return <main className="horizon-page items-center">
         <section className="mt-24 px-20">
             <form action={dispatch} className="mt-5 flex flex-col gap-4">
