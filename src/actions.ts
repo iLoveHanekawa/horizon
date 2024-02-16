@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache';
 import { genSalt, hash } from 'bcrypt';
+import prisma from './db';
 import { encrypt } from './auth/utils';
 import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE, SALT_ROUNDS } from './auth/constants';
 import { cookies } from 'next/headers';

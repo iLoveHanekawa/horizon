@@ -1,11 +1,9 @@
+import 'server-only';
 import { cookies } from "next/headers"
 import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE } from "./constants"
 import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { JWT_SECRET } from "./constants"
 import { NextRequest, NextResponse } from "next/server";
-import 'server-only';
-import { redirect } from "next/navigation";
-import { APP_URL } from "@/app/config";
 
 export type HorizonPayload = {
     userId: string
@@ -74,7 +72,6 @@ export const updateSession = async (req: NextRequest) => {
 export const getCurrentUser = async (): Promise<{ firstname: string, lastname: string, email: string } | null> => {
     const data = await getSession();
     if(!data || data.exp! <= Date.now()) {
-        cookies().set(AUTH_SESSION_COOKIE, '', { expires: new Date(0) });
         return null;
     }
     const admin = await prisma?.user.findFirst({
@@ -83,7 +80,6 @@ export const getCurrentUser = async (): Promise<{ firstname: string, lastname: s
         }
     });
     if(!admin) {
-        cookies().set(AUTH_SESSION_COOKIE, '', { expires: new Date(0) });
         return null;
     }
     else return {
