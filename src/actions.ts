@@ -43,7 +43,7 @@ export async function register(prevState: any, formData: FormData): Promise<{mes
         });
         const salt = await genSalt(SALT_ROUNDS);
         const hashedPass = await hash(data.password, salt);
-        await prisma?.user.create({
+        const admin = await prisma?.user.create({
             data: {
                 firstname: data.firstname,
                 lastname: data.lastname,
@@ -51,6 +51,9 @@ export async function register(prevState: any, formData: FormData): Promise<{mes
                 password: hashedPass
             }
         });
+        const signedJWT = await encrypt({ userId: admin?.id! });
+        const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
+        cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
         return {
             message: 'Admin created successful.'
         }
