@@ -15,10 +15,20 @@ export interface HorizonJWTPayload extends JWTPayload {
 
 const key = new TextEncoder().encode(JWT_SECRET);
 
+/**
+ * Encrypt the payload using JWT.
+ * @param payload HorizonPayload
+ * @returns Promise<string>
+ */
 export const encrypt = async(payload: HorizonPayload) => {
     return await new SignJWT(payload).setProtectedHeader({ alg: 'HS256'}).setIssuedAt().setExpirationTime('10 sec from now').sign(key);
 }
 
+/**
+ * decrypt the input string present in session's value
+ * @param input string
+ * @returns 
+*/
 export const decrypt = async (input: string): Promise<HorizonJWTPayload> => {
     const { payload } = await jwtVerify<{ expires: number }>(input, key, {
         algorithms: ['HS256']
@@ -26,12 +36,21 @@ export const decrypt = async (input: string): Promise<HorizonJWTPayload> => {
     return payload;
 }
 
+/**
+ * Gets the session data
+ * @returns Promise<HorizonJWTPayload>
+*/
 export const getSession = async() => {
     const session = cookies().get(AUTH_SESSION_COOKIE)?.value;
     if(!session) return null;
     return await decrypt(session);
 }
 
+/**
+ * Updates the session cookie's expirations
+ * @param req NextRequest 
+ * @returns Promise<void>
+*/
 export const updateSession = async (req: NextRequest) => {
     const session = req.cookies.get(AUTH_SESSION_COOKIE)?.value;
     if(!session) return null;
