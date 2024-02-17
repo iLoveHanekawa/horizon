@@ -22,7 +22,7 @@ const key = new TextEncoder().encode(JWT_SECRET);
  * @returns Promise<string>
 */
 export const encrypt = async(payload: HorizonPayload) => {
-    return await new SignJWT(payload).setProtectedHeader({ alg: 'HS256'}).setIssuedAt().setExpirationTime('10 sec from now').sign(key);
+    return await new SignJWT(payload).setProtectedHeader({ alg: 'HS256'}).setIssuedAt().setExpirationTime('30 min from now').sign(key);
 }
 
 /**
