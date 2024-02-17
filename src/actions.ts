@@ -8,7 +8,6 @@ import { encrypt } from './auth/utils';
 import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE, SALT_ROUNDS } from './auth/constants';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { APP_URL } from './app/config';
 
 export async function register(prevState: any, formData: FormData): Promise<{message: string}> {
     const schema = z.object({
@@ -98,9 +97,7 @@ export async function login(prevState: any, formData: FormData): Promise<{ messa
         const signedJWT = await encrypt({ userId: admin.id });
         const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
         cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
-        return {
-            message: "Logged the user in successfully."
-        }
+        redirect('/admin');
     }
     else {
         return {

@@ -5,8 +5,6 @@ import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { JWT_SECRET } from "./constants"
 import prisma from '@/db';
 import { NextRequest, NextResponse } from "next/server";
-import { redirect } from 'next/navigation';
-import { APP_URL } from '@/app/config';
 
 export type HorizonPayload = {
     userId: string
@@ -32,11 +30,16 @@ export const encrypt = async(payload: HorizonPayload) => {
  * @param input string
  * @returns 
 */
-export const decrypt = async (input: string): Promise<HorizonJWTPayload> => {
-    const { payload } = await jwtVerify<HorizonPayload>(input, key, {
-        algorithms: ['HS256']
-    });
-    return payload;
+export const decrypt = async (input: string): Promise<HorizonJWTPayload | null> => {
+    try {
+        const { payload } = await jwtVerify<HorizonPayload>(input, key, {
+            algorithms: ['HS256']
+        });
+        return payload;
+    } catch (error) {
+        console.log(error);
+        return null;        
+    }
 }
 
 /**
@@ -58,6 +61,7 @@ export const updateSession = async (req: NextRequest) => {
     const session = req.cookies.get(AUTH_SESSION_COOKIE)?.value;
     if(!session) return null;
     const parsed = await decrypt(session);
+    if(!parsed) return null;
     const expires = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
     const res = NextResponse.next();
     res.cookies.set({
