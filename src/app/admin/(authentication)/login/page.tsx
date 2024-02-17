@@ -9,7 +9,6 @@ import { useFormState, useFormStatus } from "react-dom"
 export default function Page(): JSX.Element {
     const [state, dispatch] = useFormState(login, { message: '' });
     const { pending } = useFormStatus();
-    console.log(state);
     return <main className="horizon-page items-center">
         <section className="mt-24 px-20">
             <form action={dispatch} className="mt-5 flex flex-col gap-4">

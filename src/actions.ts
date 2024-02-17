@@ -35,36 +35,27 @@ export async function register(prevState: any, formData: FormData): Promise<{mes
         message: 'Passwords do not match!',
         path: ["confirmPassword"]
     });
-    try {
-        const data = schema.parse({
-            firstname: formData.get('firstname'),
-            lastname: formData.get('lastname'),
-            email: formData.get('email'),
-            password: formData.get('password'),
-            confirmPassword: formData.get('confirm-password')
-        });
-        const salt = await genSalt(SALT_ROUNDS);
-        const hashedPass = await hash(data.password, salt);
-        const admin = await prisma?.user.create({
-            data: {
-                firstname: data.firstname,
-                lastname: data.lastname,
-                email: data.email,
-                password: hashedPass
-            }
-        });
-        const signedJWT = await encrypt({ userId: admin?.id! });
-        const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
-        cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
-        return {
-            message: 'Admin created successful.'
+    const data = schema.parse({
+        firstname: formData.get('firstname'),
+        lastname: formData.get('lastname'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        confirmPassword: formData.get('confirm-password')
+    });
+    const salt = await genSalt(SALT_ROUNDS);
+    const hashedPass = await hash(data.password, salt);
+    const admin = await prisma?.user.create({
+        data: {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            email: data.email,
+            password: hashedPass
         }
-    } catch (error) {
-        console.log(error);
-        return {
-            message: 'Admin creation failed.'
-        }
-    }
+    });
+    const signedJWT = await encrypt({ userId: admin?.id! });
+    const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
+    cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
+    redirect('/admin');
 }
 
 export async function login(prevState: any, formData: FormData): Promise<{ message: string }> {
