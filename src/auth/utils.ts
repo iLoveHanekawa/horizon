@@ -55,7 +55,7 @@ export const getSession = async() => {
 /**
  * Updates the session cookie's expirations
  * @param req NextRequest 
- * @returns Promise<void>
+ * @returns Promise<NextResponse<unknown> | null>
 */
 export const updateSession = async (req: NextRequest) => {
     const session = req.cookies.get(AUTH_SESSION_COOKIE)?.value;
@@ -70,6 +70,7 @@ export const updateSession = async (req: NextRequest) => {
         expires,
         httpOnly: true
     });
+    return res;
 }
 
 /**
