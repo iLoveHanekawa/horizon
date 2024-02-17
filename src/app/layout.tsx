@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import Link from "next/link";
 import { getSession } from "@/auth/utils";
+import { LogoutForm } from "./components/LogoutForm";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,7 @@ export default async function RootLayout({
             <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Home</Link>
             <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Projects</Link>
           </div>
-          {session && <button className="hover:text-gray-200 transition-colors duration-300">Log out</button>}
+          {session && <LogoutForm />}
         </nav>
         {children}
       </body>
