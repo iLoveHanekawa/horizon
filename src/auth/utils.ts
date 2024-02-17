@@ -5,6 +5,8 @@ import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { JWT_SECRET } from "./constants"
 import prisma from '@/db';
 import { NextRequest, NextResponse } from "next/server";
+import { redirect } from 'next/navigation';
+import { APP_URL } from '@/app/config';
 
 export type HorizonPayload = {
     userId: string
@@ -72,7 +74,7 @@ export const updateSession = async (req: NextRequest) => {
 */
 export const getCurrentUser = async (): Promise<{ firstname: string, lastname: string, email: string } | null> => {
     const data = await getSession();
-    if(!data || data.exp! <= Date.now()) {
+    if(!data || data.exp! > Date.now()) {
         return null;
     }
     const admin = await prisma?.user.findFirst({

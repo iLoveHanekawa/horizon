@@ -7,6 +7,8 @@ import prisma from './db';
 import { encrypt } from './auth/utils';
 import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE, SALT_ROUNDS } from './auth/constants';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { APP_URL } from './app/config';
 
 export async function register(prevState: any, formData: FormData): Promise<{message: string}> {
     const schema = z.object({
@@ -77,40 +79,32 @@ export async function login(prevState: any, formData: FormData): Promise<{ messa
             required_error: 'Password is a required field.'
         })
     });
-
-    try {
-        const data = schema.parse({
-            email: formData.get('email'),
-            password: formData.get('password')
-        });
-        const admin = await prisma?.user.findFirst({
-            where: {
-                email: data.email
-            }
-        });
-        if(!admin) {
-            return {
-                message: 'User not found! Please register.'
-            }
+    const data = schema.parse({
+        email: formData.get('email'),
+        password: formData.get('password')
+    });
+    const admin = await prisma?.user.findFirst({
+        where: {
+            email: data.email
         }
-        const isPassMatched = await compare(data.password, admin?.password);
-        if(isPassMatched) {
-            const signedJWT = await encrypt({ userId: admin.id });
-            const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
-            cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
-            return {
-                message: "Logged the user in successfully."
-            }
-        }
-        else {
-            return {
-                message: "Incorrect password or username!"
-            }
-        }
-    } catch (error) {
-        console.log(error);
+    });
+    if(!admin) {
         return {
-            message: "Failed to log user in."
-        };
+            message: 'User not found! Please register.'
+        }
+    }
+    const isPassMatched = await compare(data.password, admin?.password);
+    if(isPassMatched) {
+        const signedJWT = await encrypt({ userId: admin.id });
+        const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
+        cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
+        return {
+            message: "Logged the user in successfully."
+        }
+    }
+    else {
+        return {
+            message: "Incorrect password or username!"
+        }
     }
 } 

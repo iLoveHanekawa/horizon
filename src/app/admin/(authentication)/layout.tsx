@@ -7,7 +7,6 @@ type RegisterProps = Readonly<{ children: React.ReactNode}>
 
 export default async function Layout({ children }: RegisterProps): Promise<JSX.Element> {
     const user = await getCurrentUser();
-    console.log(user);
-    if(user) return redirect(APP_URL + '/admin');
+    if(user) redirect('/admin');
     return <div>{children}</div>
 }
