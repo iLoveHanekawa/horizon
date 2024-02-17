@@ -9,6 +9,11 @@ import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE, SALT_ROUNDS
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+/**
+ * Server action to register a new user
+ * @param prevState any
+ * @param formData FormData
+*/
 export async function register(prevState: any, formData: FormData): Promise<{message: string}> {
     const schema = z.object({
         firstname: z.string({
@@ -58,6 +63,12 @@ export async function register(prevState: any, formData: FormData): Promise<{mes
     redirect('/admin');
 }
 
+/**
+ * Server action to log in a registered user.
+ * @param prevState any
+ * @param formData FormData
+ * @returns Promise<{ message: string }>
+ */
 export async function login(prevState: any, formData: FormData): Promise<{ message: string }> {
     const schema = z.object({
         email: z.string({
@@ -97,6 +108,11 @@ export async function login(prevState: any, formData: FormData): Promise<{ messa
     }
 } 
 
+/**
+ * Server action to log out a signed in user. 
+ * @param prevState any
+ * @param formData FormData
+ */
 export const logout = async (prevState: any, formData: FormData) => {
     cookies().set(AUTH_SESSION_COOKIE, '', { expires: new Date(0), httpOnly: true});
     redirect('/admin/login');

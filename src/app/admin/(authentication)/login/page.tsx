@@ -14,11 +14,11 @@ export default function Page(): JSX.Element {
             <form action={dispatch} className="mt-5 flex flex-col gap-4">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="email">Email</Label>
-                    <Input type={'email'} name="email" />
+                    <Input type={'email'} name="email" id="email" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="password">Password</Label>
-                    <Input type={'password'} name="password" />
+                    <Input type={'password'} name="password" id="password" />
                 </div>
                 <Button type={"submit"} aria-disabled={pending} disabled={pending}>Login</Button>
             </form>

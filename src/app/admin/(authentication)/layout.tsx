@@ -1,4 +1,3 @@
-import { APP_URL } from "@/app/config";
 import { getCurrentUser } from "@/auth/utils"
 import { redirect } from "next/navigation";
 import React from "react";
