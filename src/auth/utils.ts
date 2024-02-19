@@ -10,9 +10,7 @@ export type HorizonPayload = {
     userId: string
 }
 
-export interface HorizonJWTPayload extends JWTPayload {
-    userId: string
-}
+interface HorizonJWTPayload extends JWTPayload, HorizonPayload {}
 
 const key = new TextEncoder().encode(JWT_SECRET);
 
