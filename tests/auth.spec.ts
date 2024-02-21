@@ -23,8 +23,8 @@ test.describe('authentication', () => {
         await page.$eval('input[name="email"]', (element) => {
             element === document.activeElement;
         });
-        await page.getByRole('textbox', { name: 'email' }).fill('test@example.com');
-        await page.getByRole('textbox', { name: 'password' }).fill('testuser123');
+        await page.getByTestId('email').fill('test@example.com');
+        await page.getByTestId('password').fill('testuser123');
         const submitButton = page.getByRole('button', { name: 'Login', exact: true });
         await expect(submitButton).toBeVisible();
         await submitButton.click();

@@ -15,11 +15,11 @@ export default function Page(): JSX.Element {
             <form action={dispatch} className="mt-5 flex flex-col gap-4">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="email">Email</Label>
-                    <Input type={'email'} name="email" id="email" placeholder="john.doe@example.com" />
+                    <Input data-testid="email" type={'email'} name="email" id="email" placeholder="john.doe@example.com" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="password">Password</Label>
-                    <Input type={'password'} name="password" id="password" />
+                    <Input data-testid="password" type={'password'} name="password" id="password" />
                 </div>
                 <Button name="login-submit" className="bg-zinc-800  text-gray-200 duration-300" type={"submit"} aria-disabled={pending} disabled={pending}>Login</Button>
             </form>
