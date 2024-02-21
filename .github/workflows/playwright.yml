@@ -22,7 +22,7 @@ jobs:
     - name: Generate Prisma Client
       run: npx prisma generate
     - name: Run development server
-      run: npm run dev
+      run: npm run dev &
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v3
