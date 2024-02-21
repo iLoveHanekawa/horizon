@@ -18,7 +18,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Add Environment Variables
-      run: echo -e "DATABASE_URL=${{ secrets.DATABASE_URL }}\nAPP_URL_DEV=${{ secrets.APP_URL_DEV }}\nAPP_URL_PROD=${{ secrets.APP_URL_PROD }}\nJWT_SECRET=${{ secrets.JWT_SECRET }}\nNODE_ENV=${{ secrets.NODE_ENV }} > ./.env
+      run: echo -e "DATABASE_URL=${{ secrets.DATABASE_URL }}\nAPP_URL_DEV=${{ secrets.APP_URL_DEV }}\nAPP_URL_PROD=${{ secrets.APP_URL_PROD }}\nJWT_SECRET=${{ secrets.JWT_SECRET }}\nNODE_ENV=${{ secrets.NODE_ENV }}" > ./.env
     - name: Generate Prisma Client
       run: npx prisma generate
     - name: Run development server
