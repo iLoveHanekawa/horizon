@@ -3,9 +3,10 @@ import { config } from 'dotenv';
 config({ path: './env' });
 import { APP_URL } from '@/app/config';
 const AUTH_SESSION_COOKIE = 'horizon-session';
+import prisma from '@/db';
 
 test.describe('authentication', () => {
-    test('Login works and sets session cookie', async({ request, page, browser }) => {
+    test('Login works and sets session cookie', async({ page, browser }) => {
         await page.goto(APP_URL + '/admin/login');
         const context = browser.contexts()[0];
         let cookies = await context.cookies();
@@ -29,10 +30,13 @@ test.describe('authentication', () => {
         await submitButton.click();
         await expect(page).toHaveURL(APP_URL + '/admin');
         cookies = await browser.contexts()[0].cookies()
-        // const cookies = await page.context().cookies();
         authCookie = cookies.find(cookie => {
             return cookie.name === AUTH_SESSION_COOKIE
         });
         expect(authCookie).toBeTruthy();
     });
+
+    test('Register works and sets session cookie', async ({ page, browser }) => {
+        await page.goto(APP_URL + '/admin/register');
+    })
 });
