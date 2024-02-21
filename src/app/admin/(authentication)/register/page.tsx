@@ -15,25 +15,25 @@ export default function Page() {
             <form action={dispatch} className="mt-5 flex flex-col gap-4">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="firstname">First name</Label>
-                    <Input id="firstname" type={'text'} name="firstname" placeholder="John" />
+                    <Input data-testid="firstname" id="firstname" type={'text'} name="firstname" placeholder="John" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="lastname">Last name</Label>
-                    <Input id="lastname" type={'text'} name="lastname" placeholder="Doe" />
+                    <Input data-testid="lastname" id="lastname" type={'text'} name="lastname" placeholder="Doe" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type={'email'} name="email" placeholder="john.doe@example.com" />
+                    <Input data-testid="email" id="email" type={'email'} name="email" placeholder="john.doe@example.com" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" type={'password'} name="password" />
+                    <Input data-testid="password" id="password" type={'password'} name="password" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
-                    <Input id="confirm-password" type={'password'} name="confirm-password" />
+                    <Label htmlFor="confirm-password">Confirm password</Label>
+                    <Input data-testid="confirm-password" id="confirm-password" type={'password'} name="confirm-password" />
                 </div>
-                <Button className="bg-zinc-800  text-gray-200 duration-300" aria-disabled={pending} disabled={pending}>Register</Button>
+                <Button data-testid="submit" className="bg-zinc-800  text-gray-200 duration-300" aria-disabled={pending} disabled={pending}>Register</Button>
             </form>
         </section>
     </main>
