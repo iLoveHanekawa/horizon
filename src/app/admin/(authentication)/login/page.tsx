@@ -21,7 +21,7 @@ export default function Page(): JSX.Element {
                     <Label htmlFor="password">Password</Label>
                     <Input type={'password'} name="password" id="password" />
                 </div>
-                <Button className="bg-zinc-800  text-gray-200 duration-300" type={"submit"} aria-disabled={pending} disabled={pending}>Login</Button>
+                <Button name="login-submit" className="bg-zinc-800  text-gray-200 duration-300" type={"submit"} aria-disabled={pending} disabled={pending}>Login</Button>
             </form>
         </section>
     </main>

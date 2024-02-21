@@ -37,3 +37,15 @@ export default function Page() {
         </section>
     </main>
 }
+
+
+const print = <T extends {}>(x: T) => {
+    console.log(x);
+}
+
+
+type MyPromise<T extends {}> = {}
+
+
+const x: MyPromise<{ greet: string }> = { greet: 'hello' }
+
