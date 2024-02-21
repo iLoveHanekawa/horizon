@@ -13,15 +13,15 @@ export default function Page() {
             <form className="mt-5 flex flex-col gap-4">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="firstname">First name</Label>
-                    <Input type="text" id="firstname" placeholder="First name" />
+                    <Input type="text" id="firstname" name="firstname" placeholder="First name" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="lastname">Last name</Label>
-                    <Input type="text" id="lastname" placeholder="Last name" />
+                    <Input type="text" id="lastname" name="lastname" placeholder="Last name" />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="description">Description</Label>
-                    <Textarea />
+                    <Textarea name="description" />
                 </div>
                 <Button className="bg-zinc-800">Add paragraph</Button>
                 <Button className="bg-zinc-800  text-gray-200 duration-300" type="submit">Save</Button>
