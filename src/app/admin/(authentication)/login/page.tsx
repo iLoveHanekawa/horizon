@@ -18,12 +18,12 @@ export default function Page(): JSX.Element {
             <form action={dispatch} className="mt-5 flex flex-col gap-4">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="email">Email</Label>
-                    <Input data-testid="email" type={'email'} name="email" id="email" placeholder="john.doe@example.com" />
+                    <Input data-testid="email" type={'email'} required={true} name="email" id="email" placeholder="john.doe@example.com" />
                     <Errors errors={state.errors.fieldErrors.email} />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="password">Password</Label>
-                    <Input data-testid="password" type={'password'} name="password" id="password" />
+                    <Input required={true} data-testid="password" type={'password'} name="password" id="password" />
                     <Errors errors={state.errors.fieldErrors.password} />
                 </div>
                 <FormButton textContent={'Login'} />

@@ -89,7 +89,7 @@ export async function login(prevState: any, formData: FormData): Promise<{ error
 
     let user: User | null = null;
         
-    async function isRegisteredUser(email?: string) {
+    async function isRegisteredUser(email?: string): Promise<boolean> {
         if(!email) return false;
         user = await prisma.user.findUnique({
             where: {
