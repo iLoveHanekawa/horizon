@@ -17,8 +17,7 @@ test.describe('authentication', () => {
         expect(authCookie).toBeFalsy();
         await page.getByTestId('email').fill('test@example.com');
         await page.getByTestId('password').fill('testuse');
-        const submitButton = page.getByRole('button', { name: 'Login', exact: true });
-        await submitButton.click();
+        await page.getByTestId('submit').click();
         await expect(page).toHaveURL(APP_URL + '/admin/login');
         cookies = await browser.contexts()[0].cookies()
         authCookie = cookies.find(cookie => {
@@ -46,7 +45,7 @@ test.describe('authentication', () => {
         });
         await page.getByTestId('email').fill('test@example.com');
         await page.getByTestId('password').fill('testuser123');
-        const submitButton = page.getByRole('button', { name: 'Login', exact: true });
+        const submitButton = page.getByTestId('submit');
         await expect(submitButton).toBeVisible();
         await submitButton.click();
         await expect(page).toHaveURL(APP_URL + '/admin');

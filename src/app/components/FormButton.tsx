@@ -11,7 +11,7 @@ type FormButtonProps = Readonly<{
 export const FormButton: React.FC<FormButtonProps> = ({ textContent }) => {
     const { pending } = useFormStatus();
     return <>
-        { pending? <ButtonLoading />: <Button name="login-submit" className="bg-zinc-800  text-gray-200 duration-300" type={"submit"} aria-disabled={pending} disabled={pending}>{textContent}</Button>}
+        { pending? <ButtonLoading />: <Button data-testid={"submit"} className="bg-zinc-800  text-gray-200 duration-300" type={"submit"} aria-disabled={pending} disabled={pending}>{textContent}</Button>}
     </>
 
 }
