@@ -6,6 +6,26 @@ const AUTH_SESSION_COOKIE = 'horizon-session';
 import prisma from '@/db';
 
 test.describe('authentication', () => {
+
+    test('Login does not work with incorrect password', async({ page, browser }) => {
+        await page.goto(APP_URL + '/admin/login');
+        const context = browser.contexts()[0];
+        let cookies = await context.cookies();
+        let authCookie = cookies.find(cookie => {
+            return cookie.name === AUTH_SESSION_COOKIE
+        });
+        expect(authCookie).toBeFalsy();
+        await page.getByTestId('email').fill('test@example.com');
+        await page.getByTestId('password').fill('testuse');
+        await page.getByTestId('submit').click();
+        await expect(page).toHaveURL(APP_URL + '/admin/login');
+        cookies = await browser.contexts()[0].cookies()
+        authCookie = cookies.find(cookie => {
+            return cookie.name === AUTH_SESSION_COOKIE
+        });
+        expect(authCookie).toBeFalsy();
+    })
+
     test('Login works and sets session cookie', async({ page, browser }) => {
         await page.goto(APP_URL + '/admin/login');
         const context = browser.contexts()[0];
@@ -25,7 +45,7 @@ test.describe('authentication', () => {
         });
         await page.getByTestId('email').fill('test@example.com');
         await page.getByTestId('password').fill('testuser123');
-        const submitButton = page.getByRole('button', { name: 'Login', exact: true });
+        const submitButton = page.getByTestId('submit');
         await expect(submitButton).toBeVisible();
         await submitButton.click();
         await expect(page).toHaveURL(APP_URL + '/admin');
@@ -95,5 +115,15 @@ test.describe('authentication', () => {
             return cookie.name === AUTH_SESSION_COOKIE
         });
         expect(authCookie).toBeTruthy();
+    });
+});
+
+test.describe('validation errors', () => {
+    test('login page validation', ({ page }) => {
+        
+    });
+
+    test('register page validation', ({ page }) => {
+
     });
 });
