@@ -7,8 +7,24 @@ import prisma from '@/db';
 
 test.describe('authentication', () => {
 
-    test('Login does not work with incorrect password', async({}) => {
-        
+    test('Login does not work with incorrect password', async({ page, browser }) => {
+        await page.goto(APP_URL + '/admin/login');
+        const context = browser.contexts()[0];
+        let cookies = await context.cookies();
+        let authCookie = cookies.find(cookie => {
+            return cookie.name === AUTH_SESSION_COOKIE
+        });
+        expect(authCookie).toBeFalsy();
+        await page.getByTestId('email').fill('test@example.com');
+        await page.getByTestId('password').fill('testuse');
+        const submitButton = page.getByRole('button', { name: 'Login', exact: true });
+        await submitButton.click();
+        await expect(page).toHaveURL(APP_URL + '/admin/login');
+        cookies = await browser.contexts()[0].cookies()
+        authCookie = cookies.find(cookie => {
+            return cookie.name === AUTH_SESSION_COOKIE
+        });
+        expect(authCookie).toBeFalsy();
     })
 
     test('Login works and sets session cookie', async({ page, browser }) => {
