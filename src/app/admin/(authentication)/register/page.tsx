@@ -9,6 +9,7 @@ import { FormButton } from "@/app/components/FormButton";
 import { Errors } from "@/components/ui/error";
 
 export default function Page() {
+    
     const [state, dispatch] = useFormState(register, { errors: {
         fieldErrors: {},
         formErrors: []
