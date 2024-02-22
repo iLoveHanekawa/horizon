@@ -1,6 +1,6 @@
 'use server'
 
-import { z } from 'zod'
+import { Schema, ZodError, ZodIssue, ZodIssueCode, ZodSchema, z } from 'zod'
 import { revalidatePath } from 'next/cache';
 import { genSalt, hash, compare } from 'bcrypt';
 import prisma from './db';
@@ -8,6 +8,8 @@ import { encrypt } from './auth/utils';
 import { AUTH_COOKIE_EXPIRATION_IN_MILISECONDS, AUTH_SESSION_COOKIE, SALT_ROUNDS } from './auth/constants';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { LoginActionFormData, LoginActionFormErrors, loginActionSchema } from './app/zod/schemas/loginActionSchema';
+import { User } from '@prisma/client';
 
 /**
  * Server action to register a new user
@@ -69,42 +71,69 @@ export async function register(prevState: any, formData: FormData): Promise<{mes
  * @param formData FormData
  * @returns Promise<{ message: string }>
  */
-export async function login(prevState: any, formData: FormData): Promise<{ message: string }> {
-    const schema = z.object({
-        email: z.string({
-            invalid_type_error: '{email} is supposed to be a string',
-            required_error: 'Email is a required field.'
-        }).email(),
-        password: z.string({
-            invalid_type_error: '{password} is supposed to be a string',
-            required_error: 'Password is a required field.'
-        })
-    });
-    const data = schema.parse({
-        email: formData.get('email'),
-        password: formData.get('password')
-    });
-    const admin = await prisma?.user.findFirst({
-        where: {
-            email: data.email
-        }
-    });
-    if(!admin) {
-        return {
-            message: 'User not found! Please register.'
+export async function login(prevState: any, formData: FormData): Promise<{ errors: LoginActionFormErrors }> {
+    let data: LoginActionFormData | null = null;
+    try {
+        data = loginActionSchema.parse({
+            email: formData.get('email'),
+            password: formData.get('password')
+        });
+    } catch (error) {
+        if(error instanceof ZodError) {
+            const errors: LoginActionFormErrors = error.flatten();
+            return {
+                errors
+            }
         }
     }
-    const isPassMatched = await compare(data.password, admin?.password);
-    if(isPassMatched) {
-        const signedJWT = await encrypt({ userId: admin.id });
+
+    let user: User | null = null;
+        
+    async function isRegisteredUser(email?: string) {
+        if(!email) return false;
+        user = await prisma.user.findUnique({
+            where: {
+                email: email,
+            },
+        });
+        if(!user) return false;
+        return true;
+    }
+
+    async function validateCredentials(password?: string): Promise<boolean> {
+        if(!password) return false;
+        const passwordMatch = await compare(password, user!.password);
+        if (!passwordMatch) {
+            return false; // Error message if password does not match
+        }
+        else return true;
+    }
+
+    const isRegisteredAdmin = await isRegisteredUser(data?.email);
+    if(!isRegisteredAdmin) return {
+        errors: {
+            formErrors: [],
+            fieldErrors: {
+                email: ['The entered email has not been registered yet. Please sign up first.']
+            }
+        }
+    }
+    const userHasValidCredentials = validateCredentials(data?.password);
+    if(!userHasValidCredentials) {
+        return {
+            errors: {
+                formErrors: [],
+                fieldErrors: {
+                    password: ['Incorrect username or password.']
+                }
+            }
+        }
+    }
+    else {
+        const signedJWT = await encrypt({ userId: user!.id });
         const expiration = new Date(Date.now() + AUTH_COOKIE_EXPIRATION_IN_MILISECONDS);
         cookies().set(AUTH_SESSION_COOKIE, signedJWT, { expires: expiration, httpOnly: true})
         redirect('/admin');
-    }
-    else {
-        return {
-            message: "Incorrect password or username!"
-        }
     }
 } 
 

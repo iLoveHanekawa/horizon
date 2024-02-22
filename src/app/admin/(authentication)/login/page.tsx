@@ -5,9 +5,13 @@ import { Input } from "@/components/ui/input"
 import { login } from "@/actions"
 import { useFormState } from "react-dom"
 import { FormButton } from "@/app/components/FormButton"
+import { LoginActionFormErrors, type LoginActionFormData } from "@/app/zod/schemas/loginActionSchema"
 
 export default function Page(): JSX.Element {
-    const [state, dispatch] = useFormState(login, { message: '' });
+    const [state, dispatch] = useFormState(login, { errors: {
+        fieldErrors: {},
+        formErrors: []
+    } });
     return <main className="horizon-page items-center">
         <section className="px-20 mt-48 w-1/3">
             <h1 className="text-3xl font-bold">Login</h1>
@@ -20,7 +24,7 @@ export default function Page(): JSX.Element {
                     <Label htmlFor="password">Password</Label>
                     <Input data-testid="password" type={'password'} name="password" id="password" />
                 </div>
-                <div className="test-red-800 text-xs text-red-700 font-medium">{ state.message }</div>
+                {/* <div className="test-red-800 text-xs text-red-700 font-medium">{ state.message }</div> */}
                 <FormButton textContent={'Login'} />
             </form>
         </section>
