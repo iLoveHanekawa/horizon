@@ -1,0 +1,2 @@
+add validation error testing
+single source of truth for types in login and register actions
