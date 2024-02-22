@@ -2,13 +2,12 @@
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { login } from "@/actions"
-import { useFormState, useFormStatus } from "react-dom"
+import { useFormState } from "react-dom"
+import { FormButton } from "@/app/components/FormButton"
 
 export default function Page(): JSX.Element {
     const [state, dispatch] = useFormState(login, { message: '' });
-    const { pending } = useFormStatus();
     return <main className="horizon-page items-center">
         <section className="px-20 mt-48 w-1/3">
             <h1 className="text-3xl font-bold">Login</h1>
@@ -21,7 +20,8 @@ export default function Page(): JSX.Element {
                     <Label htmlFor="password">Password</Label>
                     <Input data-testid="password" type={'password'} name="password" id="password" />
                 </div>
-                <Button name="login-submit" className="bg-zinc-800  text-gray-200 duration-300" type={"submit"} aria-disabled={pending} disabled={pending}>Login</Button>
+                <div className="test-red-800 text-xs text-red-700 font-medium">{ state.message }</div>
+                <FormButton textContent={'Login'} />
             </form>
         </section>
     </main>

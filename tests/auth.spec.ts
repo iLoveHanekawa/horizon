@@ -97,3 +97,13 @@ test.describe('authentication', () => {
         expect(authCookie).toBeTruthy();
     });
 });
+
+test.describe('validation errors', () => {
+    test('login page validation', ({ page }) => {
+        
+    });
+
+    test('register page validation', ({ page }) => {
+
+    });
+});
