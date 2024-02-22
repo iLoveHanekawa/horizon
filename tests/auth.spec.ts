@@ -6,6 +6,11 @@ const AUTH_SESSION_COOKIE = 'horizon-session';
 import prisma from '@/db';
 
 test.describe('authentication', () => {
+
+    test('Login does not work with incorrect password', async({}) => {
+        
+    })
+
     test('Login works and sets session cookie', async({ page, browser }) => {
         await page.goto(APP_URL + '/admin/login');
         const context = browser.contexts()[0];

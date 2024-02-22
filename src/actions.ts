@@ -1,6 +1,6 @@
 'use server'
 
-import { Schema, ZodError, ZodIssue, ZodIssueCode, ZodSchema, z } from 'zod'
+import { Schema, ZodError, z } from 'zod'
 import { revalidatePath } from 'next/cache';
 import { genSalt, hash, compare } from 'bcrypt';
 import prisma from './db';
@@ -118,7 +118,7 @@ export async function login(prevState: any, formData: FormData): Promise<{ error
             }
         }
     }
-    const userHasValidCredentials = validateCredentials(data?.password);
+    const userHasValidCredentials = await validateCredentials(data?.password);
     if(!userHasValidCredentials) {
         return {
             errors: {

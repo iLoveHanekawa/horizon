@@ -9,7 +9,7 @@ export const loginActionSchema = z.object({
         invalid_type_error: '{password} is supposed to be a string',
         required_error: 'Password is a required field.'
     })
-})
+});
 
 export type LoginActionFormData = {
     email: string;
