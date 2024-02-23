@@ -118,12 +118,11 @@ test.describe('authentication', () => {
     });
 });
 
-
 test.describe('login validation errors', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto(APP_URL + '/admin/login');
     });
-    test('ensure required tags are present on inputs', async ({ page }) => {
+    test('required tags are present on inputs', async ({ page }) => {
         const emailInput = page.getByTestId('email');
         await expect(emailInput).toHaveAttribute('required');
         const passwordInput = page.getByTestId('password');
@@ -146,4 +145,96 @@ test.describe('login validation errors', () => {
 });
 
 test.describe('register validation errors', () => {
-})
+    test.beforeEach(async ({ page }) => {
+        await page.goto(APP_URL + '/admin/register');
+    });
+    test('required tags are present on inputs', async ({ page }) => {
+        const emailInput = page.getByTestId('email');
+        const lastnameInput = page.getByTestId('lastname');
+        const passwordInput = page.getByTestId('password');
+        const firstnameInput = page.getByTestId('firstname');
+        const confirmPasswordInput = page.getByTestId('confirm-password');
+        await expect(emailInput).toHaveAttribute('required');
+        await expect(lastnameInput).toHaveAttribute('required');
+        await expect(passwordInput).toHaveAttribute('required');
+        await expect(firstnameInput).toHaveAttribute('required');
+        await expect(confirmPasswordInput).toHaveAttribute('required');
+    });
+    test('email has to be unique', async ({ page }) => {
+        const emailInput = page.getByTestId('email');
+        const lastnameInput = page.getByTestId('lastname');
+        const passwordInput = page.getByTestId('password');
+        const firstnameInput = page.getByTestId('firstname');
+        const confirmPasswordInput = page.getByTestId('confirm-password');
+        await emailInput.fill('test@example.com');
+        await lastnameInput.fill('test');
+        await firstnameInput.fill('user');
+        await passwordInput.fill('12345678');
+        await confirmPasswordInput.fill('12345678');
+        await page.getByTestId('submit').click();
+        const url = page.url();
+        expect(url).toBe(APP_URL + '/admin/register');
+        const emailErrorList = page.getByTestId('error-email');
+        await expect(emailErrorList).toHaveText('The email you have entered is already registered. Please try to log in.');
+    });
+
+    test('passwords show errors when they do not match', async ({ page }) => {
+        const emailInput = page.getByTestId('email');
+        const lastnameInput = page.getByTestId('lastname');
+        const passwordInput = page.getByTestId('password');
+        const firstnameInput = page.getByTestId('firstname');
+        const confirmPasswordInput = page.getByTestId('confirm-password');
+        await emailInput.fill('test2@example.com');
+        await lastnameInput.fill('test');
+        await firstnameInput.fill('user');
+        await passwordInput.fill('12345678');
+        await confirmPasswordInput.fill('12345678x');
+        await page.getByTestId('submit').click();
+        const url = page.url();
+        expect(url).toBe(APP_URL + '/admin/register');
+        const confirmPasswordErrorList = page.getByTestId('error-confirm-password');
+        await expect(confirmPasswordErrorList).toHaveText('Passwords do not match!');
+    });
+
+    test('short passwords should throw errors.', async ({ page }) => {
+        const emailInput = page.getByTestId('email');
+        const lastnameInput = page.getByTestId('lastname');
+        const passwordInput = page.getByTestId('password');
+        const firstnameInput = page.getByTestId('firstname');
+        const confirmPasswordInput = page.getByTestId('confirm-password');
+        await emailInput.fill('test2@example.com');
+        await lastnameInput.fill('test');
+        await firstnameInput.fill('user');
+        await passwordInput.fill('12');
+        await confirmPasswordInput.fill('12');
+        await page.getByTestId('submit').click();
+        const url = page.url();
+        expect(url).toBe(APP_URL + '/admin/register'); 
+        const confirmPasswordErrorList = page.getByTestId('error-confirm-password');
+        await expect(confirmPasswordErrorList).toHaveText('String must contain at least 8 character(s)');
+        const passwordErrorList = page.getByTestId('error-password');
+        await expect(passwordErrorList).toHaveText('String must contain at least 8 character(s)');
+    });
+
+    test('short names should throw errors.', async ({ page }) => {
+        const emailInput = page.getByTestId('email');
+        const lastnameInput = page.getByTestId('lastname');
+        const passwordInput = page.getByTestId('password');
+        const firstnameInput = page.getByTestId('firstname');
+        const confirmPasswordInput = page.getByTestId('confirm-password');
+        await emailInput.fill('test2@example.com');
+        await lastnameInput.fill('t');
+        await firstnameInput.fill('u');
+        await passwordInput.fill('12345678');
+        await confirmPasswordInput.fill('12345678');
+        await page.getByTestId('submit').click();
+        const url = page.url();
+        expect(url).toBe(APP_URL + '/admin/register');
+        const firstnameErrorList = page.getByTestId('error-firstname');
+        const lastnameErrorList = page.getByTestId('error-lastname');
+        await expect(lastnameErrorList).toBeVisible();
+        await expect(firstnameErrorList).toBeVisible();
+        await expect(firstnameErrorList).toHaveText('String must contain at least 2 character(s)');
+        await expect(lastnameErrorList).toHaveText('String must contain at least 2 character(s)');
+    })
+});
