@@ -19,12 +19,12 @@ export default function Page(): JSX.Element {
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="email">Email</Label>
                     <Input data-testid="email" type={'email'} required={true} name="email" id="email" placeholder="john.doe@example.com" />
-                    <Errors errors={state.errors.fieldErrors.email} />
+                    <Errors errors={state.errors.fieldErrors.email} dataTestId={"login-email"} />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="password">Password</Label>
                     <Input required={true} data-testid="password" type={'password'} name="password" id="password" />
-                    <Errors errors={state.errors.fieldErrors.password} />
+                    <Errors errors={state.errors.fieldErrors.password} dataTestId={"login-password"} />
                 </div>
                 <FormButton textContent={'Login'} />
             </form>
