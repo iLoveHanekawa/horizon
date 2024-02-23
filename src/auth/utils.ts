@@ -80,7 +80,7 @@ export const getCurrentUser = async (): Promise<{ firstname: string, lastname: s
     if(!data || data.exp! > Date.now()) {
         return null;
     }
-    const admin = await prisma?.user.findFirst({
+    const admin = await prisma?.user.findUnique({
         where: {
             id: data.userId
         }

@@ -46,6 +46,28 @@ export async function register(prevState: { errors: RegisterActionFormErrors }, 
             }
         }
     }
+
+    const isEmailUnique = async (email: string): Promise<boolean> => {
+        const user = await prisma.user.findUnique({
+            where: {
+                email
+            }
+        });
+        if(user) return false;
+        return true;
+    }
+
+    if(!(await isEmailUnique(data.email))) {
+        return {
+            errors: {
+                fieldErrors: {
+                    email: ['The email you have entered is already registered. Please try to log in.']
+                },
+                formErrors: []
+            }
+        }
+    }
+
     const salt = await genSalt(SALT_ROUNDS);
     const hashedPass = await hash(data.password, salt);
     const admin = await prisma?.user.create({
