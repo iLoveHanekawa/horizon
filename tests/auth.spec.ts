@@ -65,7 +65,7 @@ test.describe('authentication', () => {
         });
         // get rid of the test user if he exists.
         const TEST_EMAIL = 'test@example.com';
-        const user = await prisma.user.findFirst({
+        const user = await prisma.user.findUnique({
             where: {
                 email: TEST_EMAIL
             }
@@ -118,12 +118,32 @@ test.describe('authentication', () => {
     });
 });
 
-test.describe('validation errors', () => {
-    test('login page validation', ({ page }) => {
-        
+
+test.describe('login validation errors', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto(APP_URL + '/admin/login');
     });
-
-    test('register page validation', ({ page }) => {
-
+    test('ensure required tags are present on inputs', async ({ page }) => {
+        const emailInput = page.getByTestId('email');
+        await expect(emailInput).toHaveAttribute('required');
+        const passwordInput = page.getByTestId('password');
+        await expect(passwordInput).toHaveAttribute('required');
+    })
+    test('shows the correct error message when user email is not registered', async ({ page }) => {
+        await page.getByTestId('email').fill('xyz@gmail.com');
+        await page.getByTestId('password').fill('x');
+        await page.getByTestId('submit').click();
+        const emailErrorList = page.getByTestId('error-email');
+        await expect(emailErrorList).toHaveText('The entered email has not been registered yet. Please sign up first.');
+    });
+    test('shows the correct error when password is incorrect', async ({ page }) => {
+        await page.getByTestId('email').fill("test@example.com");
+        await page.getByTestId('password').fill("testuser12");
+        await page.getByTestId('submit').click();
+        const passwordErrorList = page.getByTestId('error-password');
+        await expect(passwordErrorList).toHaveText('Incorrect username or password.');
     });
 });
+
+test.describe('register validation errors', () => {
+})
