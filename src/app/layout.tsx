@@ -21,7 +21,7 @@ export default async function RootLayout({
   const session = await getSession();
   return (
     <html lang="en">
-      <Script src="https://kit.fontawesome.com/2e5130a48b.js" crossOrigin="anonymous"></Script>
+      <Script src="https://kit.fontawesome.com/2e5130a48b.js"></Script>
       <body className={inter.className}>
         <nav className="bg-black px-6 py-5 fixed w-full flex top-0 left-0 text-gray-400 text-sm font-medium tracking-wide border-b-xs justify-between border-gray-900">
           <div className="flex gap-4">
