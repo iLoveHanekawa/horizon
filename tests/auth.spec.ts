@@ -8,7 +8,7 @@ import prisma from '@/db';
 test.describe('authentication', () => {
 
     test('Login does not work with incorrect password', async({ page, browser }) => {
-        await page.goto(APP_URL + '/admin/login');
+        await page.goto(APP_URL + '/login');
         const context = browser.contexts()[0];
         let cookies = await context.cookies();
         let authCookie = cookies.find(cookie => {
@@ -18,7 +18,7 @@ test.describe('authentication', () => {
         await page.getByTestId('email').fill('test@example.com');
         await page.getByTestId('password').fill('testuse');
         await page.getByTestId('submit').click();
-        await expect(page).toHaveURL(APP_URL + '/admin/login');
+        await expect(page).toHaveURL(APP_URL + '/login');
         cookies = await browser.contexts()[0].cookies()
         authCookie = cookies.find(cookie => {
             return cookie.name === AUTH_SESSION_COOKIE
@@ -27,7 +27,7 @@ test.describe('authentication', () => {
     })
 
     test('Login works and sets session cookie', async({ page, browser }) => {
-        await page.goto(APP_URL + '/admin/login');
+        await page.goto(APP_URL + '/login');
         const context = browser.contexts()[0];
         let cookies = await context.cookies();
         let authCookie = cookies.find(cookie => {
@@ -77,7 +77,7 @@ test.describe('authentication', () => {
                 }
             });
         }
-        await page.goto(APP_URL + '/admin/register');
+        await page.goto(APP_URL + '/register');
         await expect(page).toHaveTitle('Horizon | Register');
         const heading = page.getByRole('heading', { name: 'Register'})
         await expect(heading).toBeVisible();
@@ -120,7 +120,7 @@ test.describe('authentication', () => {
 
 test.describe('login validation errors', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto(APP_URL + '/admin/login');
+        await page.goto(APP_URL + '/login');
     });
     test('required tags are present on inputs', async ({ page }) => {
         const emailInput = page.getByTestId('email');
@@ -146,7 +146,7 @@ test.describe('login validation errors', () => {
 
 test.describe('register validation errors', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto(APP_URL + '/admin/register');
+        await page.goto(APP_URL + '/register');
     });
     test('required tags are present on inputs', async ({ page }) => {
         const emailInput = page.getByTestId('email');
@@ -173,7 +173,7 @@ test.describe('register validation errors', () => {
         await confirmPasswordInput.fill('12345678');
         await page.getByTestId('submit').click();
         const url = page.url();
-        expect(url).toBe(APP_URL + '/admin/register');
+        expect(url).toBe(APP_URL + '/register');
         const emailErrorList = page.getByTestId('error-email');
         await expect(emailErrorList).toHaveText('The email you have entered is already registered. Please try to log in.');
     });
@@ -191,7 +191,7 @@ test.describe('register validation errors', () => {
         await confirmPasswordInput.fill('12345678x');
         await page.getByTestId('submit').click();
         const url = page.url();
-        expect(url).toBe(APP_URL + '/admin/register');
+        expect(url).toBe(APP_URL + '/register');
         const confirmPasswordErrorList = page.getByTestId('error-confirm-password');
         await expect(confirmPasswordErrorList).toHaveText('Passwords do not match!');
     });
@@ -209,7 +209,7 @@ test.describe('register validation errors', () => {
         await confirmPasswordInput.fill('12');
         await page.getByTestId('submit').click();
         const url = page.url();
-        expect(url).toBe(APP_URL + '/admin/register'); 
+        expect(url).toBe(APP_URL + '/register'); 
         const confirmPasswordErrorList = page.getByTestId('error-confirm-password');
         await expect(confirmPasswordErrorList).toHaveText('String must contain at least 8 character(s)');
         const passwordErrorList = page.getByTestId('error-password');
@@ -229,7 +229,7 @@ test.describe('register validation errors', () => {
         await confirmPasswordInput.fill('12345678');
         await page.getByTestId('submit').click();
         const url = page.url();
-        expect(url).toBe(APP_URL + '/admin/register');
+        expect(url).toBe(APP_URL + '/register');
         const firstnameErrorList = page.getByTestId('error-firstname');
         const lastnameErrorList = page.getByTestId('error-lastname');
         await expect(lastnameErrorList).toBeVisible();

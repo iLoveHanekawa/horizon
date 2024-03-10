@@ -174,5 +174,5 @@ export async function login(prevState: { errors: LoginActionFormErrors }, formDa
  */
 export const logout = async (prevState: any, formData: FormData) => {
     cookies().set(AUTH_SESSION_COOKIE, '', { expires: new Date(0), httpOnly: true});
-    redirect('/admin/login');
+    redirect('/login');
 }

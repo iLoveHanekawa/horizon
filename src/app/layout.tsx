@@ -27,6 +27,7 @@ export default async function RootLayout({
           <div className="flex gap-4">
             <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Home</Link>
             <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Projects</Link>
+            {session && <Link href={"/admin"}>Dashboard</Link>}
           </div>
           {session && <LogoutForm />}
         </nav>

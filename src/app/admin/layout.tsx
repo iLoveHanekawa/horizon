@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import React from "react"
-import { SideNav } from "../components/SideNav";
+import { SideNav } from "@/app/components/SideNav";
 import Link from "next/link";
 
 type LayoutProps = Readonly<{
@@ -18,6 +18,8 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         <SideNav>
             <h3 className="px-2 py-1 mb-1 text-sm text-white font-semibold">Admin Dashboard</h3>
             <Link className="text-gray-400 text-sm px-2 py-1 hover:underline" href={"/admin"}>Personal information</Link>
+            <Link className="text-gray-400 text-sm px-2 py-1 hover:underline" href={"/admin"}>Project manager</Link>
+            <Link className="text-gray-400 text-sm px-2 py-1 hover:underline" href={"/admin"}>Social handles</Link>
         </SideNav>
         {children}
     </div>

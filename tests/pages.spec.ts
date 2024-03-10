@@ -8,12 +8,12 @@ const url = process.env.NODE_ENV === 'development'? devUrl: prodUrl;
 
 test('redirections', async({ request }) => {
     const req = await request.get(url + '/admin');
-    expect(req.url()).toEqual(url + '/admin/login');
+    expect(req.url()).toEqual(url + '/login');
 });
 
 test.describe('auth pages', () => {
     test.beforeEach(async({ page }) => {
-        await page.goto(url + '/admin/login');
+        await page.goto(url + '/login');
         
     })
     test('login page ui', async({ request }) => {
