@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function Page() {
     return <main className="horizon-page items-start">
-        <section className="mt-24 px-20">
+        <section className="px-20">
             <div className="flex gap-2 flex-col">
                 <h1 className="text-3xl font-bold">Admin Dashboard</h1> 
                 <h2 className="text-md font-semibold text-gray-300 mt-3">Personal information</h2>

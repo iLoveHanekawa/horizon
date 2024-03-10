@@ -23,7 +23,7 @@ export default async function RootLayout({
     <html lang="en">
       <Script src="https://kit.fontawesome.com/2e5130a48b.js"></Script>
       <body className={inter.className}>
-        <nav className="bg-black px-6 py-5 fixed w-full flex top-0 left-0 text-gray-400 text-sm font-medium tracking-wide border-b-xs justify-between border-gray-900">
+        <nav className="bg-black px-6 py-5 fixed w-full flex top-0 left-0 z-10 text-gray-400 text-sm font-medium tracking-wide border-b-xs justify-between border-gray-900">
           <div className="flex gap-4">
             <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Home</Link>
             <Link className="hover:text-gray-200 transition-colors duration-300" href="/">Projects</Link>
